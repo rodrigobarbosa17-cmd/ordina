@@ -27,8 +27,6 @@ python app.py
 http://localhost:5000
 
 ```
-| Editar perfil próprio | ✅ | ✅ |
-| Ver painel ADM | ✅ | ❌ |
 | Gerenciar usuários | ✅ | ❌ |
 | Criar conta nova | ✅ | ✅ |
 
