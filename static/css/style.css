@@ -292,7 +292,7 @@ code {
 .sidebar-avatar { font-size: 2.2rem; flex-shrink: 0; }
 .sidebar-name { font-weight: 700; font-size: .95rem; color: #f8f1f1; }
 .sidebar-role { font-size: .78rem; color: #f8f1f1; margin-top: 1px; }
-.sidebar-turma { font-size: .78rem; color: #1c2b22; margin-top: 1px; }
+.sidebar-turma { font-size: .78rem; color: #f8f1f1; margin-top: 1px; }
 .sidebar-section { padding: 14px 14px 0; }
 .sidebar-section-title {
     font-size: .78rem;
