@@ -25,8 +25,6 @@ http://localhost:5000
 
 ---
 
-## 👑 Contas padrão
-
 ---
 
 ## 📁 Estrutura do projeto
