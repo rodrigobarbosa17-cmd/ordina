@@ -9,11 +9,14 @@ Possui chatbox com IA, sistema de login com perfis ADM e Aluno, e gerenciamento 
 ## 🚀 Como rodar
 
 ### 1. Ative o ambiente virtual
-```bash
+
 No Windows:
+```bash
 .\.ordina\Scripts\Activate
+```
 
 No Linux:
+```bash
 source .ordina/bin/activate
 ```
 
