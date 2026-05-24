@@ -25,6 +25,8 @@ python app.py
 ### 3. Acesse no navegador
 
 http://localhost:5000
+
+```
 | Editar perfil próprio | ✅ | ✅ |
 | Ver painel ADM | ✅ | ❌ |
 | Gerenciar usuários | ✅ | ❌ |
