@@ -20,7 +20,6 @@ source .ordina/bin/activate
 ### 2. Rode o sistema
 ```bash
 python app.py
-```
 
 ### 3. Acesse no navegador
 
