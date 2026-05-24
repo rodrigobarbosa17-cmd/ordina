@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block title %}Criar Conta{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="auth-header">
+            <div class="auth-icon">🎓</div>
+            <h1 class="auth-title">Criar Conta</h1>
+            <p class="auth-subtitle">Junte-se à turma da limpeza!</p>
+        </div>
+
+        <form method="POST" action="{{ url_for('registro') }}" class="auth-form">
+            <div class="form-group">
+                <label class="form-label">👤 Nome completo *</label>
+                <input type="text" name="nome" class="form-input"
+                    placeholder="Seu nome" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">🏫 Turma</label>
+                <input type="text" name="turma" class="form-input"
+                    placeholder="Ex: 9º Ano A">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">🔑 Nome de usuário *</label>
+                <input type="text" name="username" class="form-input"
+                    placeholder="Sem espaços" required autocomplete="username">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">🔒 Senha *</label>
+                <input type="password" name="senha" class="form-input"
+                    placeholder="Mínimo 4 caracteres" required autocomplete="new-password">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">🔒 Confirmar senha *</label>
+                <input type="password" name="confirma" class="form-input"
+                    placeholder="Repita a senha" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-full">
+                ✅ Criar minha conta
+            </button>
+        </form>
+
+        <div class="auth-footer">
+            <p>Já tem conta? <a href="{{ url_for('login') }}" class="link">Fazer login</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}

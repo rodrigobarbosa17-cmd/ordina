@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+{% block title %}Chat — Ordina{% endblock %}
+
+{% block content %}
+<div class="chat-layout">
+
+    <!-- Sidebar -->
+    <aside class="chat-sidebar">
+        <div class="sidebar-user">
+            <div class="sidebar-avatar">{{ session.avatar }}</div>
+            <div class="sidebar-info">
+                <p class="sidebar-name">{{ session.nome }}</p>
+                <p class="sidebar-role">
+                    {% if session.role == 'adm' %}👑 Administrador{% else %}🎓 Estudante{% endif %}
+                </p>
+                {% if user.turma %}
+                <p class="sidebar-turma">🏫 {{ user.turma }}</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="sidebar-section">
+            <p class="sidebar-section-title">📌 Dicas rápidas</p>
+            <div class="quick-btns">
+                <form method="POST" action="{{ url_for('chat') }}">
+                    <button type="submit" name="mensagem"
+                        value="Como organizar melhor nossa sala?" class="quick-btn">
+                        📦 Organização
+                    </button>
+                </form>
+                <form method="POST" action="{{ url_for('chat') }}">
+                    <button type="submit" name="mensagem"
+                        value="Quais são as melhores dicas de limpeza da sala?" class="quick-btn">
+                        🧹 Limpeza
+                    </button>
+                </form>
+                <form method="POST" action="{{ url_for('chat') }}">
+                    <button type="submit" name="mensagem"
+                        value="Como manter o ambiente da sala harmônico?" class="quick-btn">
+                        🤝 Harmonia
+                    </button>
+                </form>
+                <form method="POST" action="{{ url_for('chat') }}">
+                    <button type="submit" name="mensagem"
+                        value="Preciso ver a Escala de Limpeza da sala." class="quick-btn">
+                        📋 Escala de limpeza
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        {% if arquivos %}
+        <div class="sidebar-section">
+            <p class="sidebar-section-title">📎 Arquivos recentes</p>
+            {% for arq in arquivos[:3] %}
+            <a href="{{ url_for('download_arquivo', arquivo_id=arq.id) }}" class="sidebar-file">
+                📄 {{ arq.original_name[:28] }}{% if arq.original_name|length > 28 %}…{% endif %}
+            </a>
+            {% endfor %}
+            <a href="{{ url_for('listar_arquivos') }}" class="sidebar-more">Ver todos →</a>
+        </div>
+        {% endif %}
+
+        <form method="POST" action="{{ url_for('limpar_chat') }}" class="sidebar-clear">
+            <button type="submit" class="btn btn-ghost btn-sm"
+                onclick="return confirm('Apagar toda a conversa?')">
+                🗑️ Limpar conversa
+            </button>
+        </form>
+    </aside>
+
+    <!-- Chat principal -->
+    <div class="chat-main">
+        <div class="chat-header">
+            <div class="chat-header-info">
+                <h2>🧹 Assistente da Ordina</h2>
+                <p class="chat-status">🟢 Online — pronto para ajudar!</p>
+            </div>
+        </div>
+
+        <div class="chat-messages" id="chat-messages">
+            {% if not historico %}
+            <!-- Estado inicial: só mostra convite visual, SEM mensagem automática da IA -->
+            <div class="chat-welcome">
+                <div class="welcome-icon">🧹</div>
+                <h3>Olá, {{ session.nome }}!</h3>
+                <p>Sou o <strong>Assistente da Ordina</strong>.</p>
+                <p>Posso te ajudar com dicas de limpeza, organização e comportamento na sala de aula.</p>
+                <p>Use os atalhos ao lado ou escreva sua dúvida abaixo! 👇</p>
+            </div>
+            {% else %}
+            {% for msg in historico %}
+            <div class="message message-{{ msg.role }}">
+                <div class="message-avatar">
+                    {% if msg.role == 'user' %}{{ session.avatar }}{% else %}🧹{% endif %}
+                </div>
+                <div class="message-bubble">
+                    <div class="message-content">{% if msg.role == 'user' %}{{ msg.content }}{% else %}{{ msg.content | safe }}{% endif %}</div>
+                    <div class="message-time">{{ msg.created_at[11:16] }}</div>
+                </div>
+            </div>
+            {% endfor %}
+            {% endif %}
+        </div>
+
+        <div class="chat-input-area">
+            <form method="POST" action="{{ url_for('chat') }}" class="chat-form">
+                <input
+                    type="text"
+                    name="mensagem"
+                    class="chat-input"
+                    placeholder="Digite sua pergunta sobre limpeza ou organização..."
+                    autocomplete="off"
+                    required
+                    maxlength="500"
+                >
+                <button type="submit" class="btn btn-send">
+                    📨 Enviar
+                </button>
+            </form>
+            <p class="chat-tip">
+                💡 Experimente: <em>"Quais são as dicas de limpeza do quadro?"</em>
+            </p>
+        </div>
+    </div>
+</div>
+
+<script>
+// Rola automaticamente para a última mensagem ao carregar a página
+(function () {
+    var el = document.getElementById('chat-messages');
+    if (el) el.scrollTop = el.scrollHeight;
+}());
+</script>
+{% endblock %}

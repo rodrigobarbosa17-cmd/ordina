@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+{% block title %}Painel ADM{% endblock %}
+
+{% block content %}
+<div class="page-container">
+    <div class="page-header">
+        <h1>⚙️ Painel do Administrador</h1>
+        <p class="page-subtitle">Gerencie usuários, arquivos e o sistema</p>
+    </div>
+
+    <!-- Estatísticas -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon">👥</div>
+            <div class="stat-value">{{ usuarios | length }}</div>
+            <div class="stat-label">Alunos cadastrados</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">📄</div>
+            <div class="stat-value">{{ arquivos | length }}</div>
+            <div class="stat-label">Arquivos disponíveis</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">💬</div>
+            <div class="stat-value">{{ total_msgs }}</div>
+            <div class="stat-label">Mensagens no chat</div>
+        </div>
+    </div>
+
+    <!-- Ações rápidas -->
+    <div class="section">
+        <h2 class="section-title">⚡ Ações rápidas</h2>
+        <div class="actions-row">
+            <a href="{{ url_for('upload_arquivo') }}" class="action-card">
+                <span class="action-icon">⬆️</span>
+                <span class="action-label">Enviar arquivo PDF</span>
+            </a>
+            <a href="{{ url_for('listar_arquivos') }}" class="action-card">
+                <span class="action-icon">📎</span>
+                <span class="action-label">Ver todos os arquivos</span>
+            </a>
+            <a href="{{ url_for('perfil') }}" class="action-card">
+                <span class="action-icon">✏️</span>
+                <span class="action-label">Editar meu perfil</span>
+            </a>
+            <a href="{{ url_for('chat') }}" class="action-card">
+                <span class="action-icon">💬</span>
+                <span class="action-label">Ir para o chat</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Arquivos -->
+    <div class="section">
+        <h2 class="section-title">📄 Arquivos cadastrados</h2>
+        {% if arquivos %}
+        <div class="table-container">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Arquivo</th>
+                        <th>Descrição</th>
+                        <th>Data</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for arq in arquivos %}
+                    <tr>
+                        <td>📄 {{ arq.original_name }}</td>
+                        <td>{{ arq.descricao or '—' }}</td>
+                        <td>{{ arq.uploaded_at[:10] }}</td>
+                        <td>
+                            <a href="{{ url_for('download_arquivo', arquivo_id=arq.id) }}"
+                               class="btn btn-secondary btn-xs">⬇️</a>
+                            <form method="POST"
+                                  action="{{ url_for('excluir_arquivo', arquivo_id=arq.id) }}"
+                                  style="display:inline;">
+                                <button type="submit" class="btn btn-danger btn-xs"
+                                    onclick="return confirm('Excluir?')">🗑️</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="empty-hint">Nenhum arquivo cadastrado ainda. <a href="{{ url_for('upload_arquivo') }}">Enviar agora →</a></p>
+        {% endif %}
+    </div>
+
+    <!-- Usuários -->
+    <div class="section">
+        <h2 class="section-title">👥 Alunos cadastrados</h2>
+        {% if usuarios %}
+        <div class="table-container">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Avatar</th>
+                        <th>Nome</th>
+                        <th>Usuário</th>
+                        <th>Turma</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for u in usuarios %}
+                    <tr>
+                        <td>{{ u.avatar or '🎓' }}</td>
+                        <td>{{ u.nome or '—' }}</td>
+                        <td><code>{{ u.username }}</code></td>
+                        <td>{{ u.turma or '—' }}</td>
+                        <td>
+                            <form method="POST"
+                                  action="{{ url_for('excluir_usuario', uid=u.id) }}"
+                                  style="display:inline;">
+                                <button type="submit" class="btn btn-danger btn-xs"
+                                    onclick="return confirm('Remover {{ u.nome or u.username }}?')">
+                                    🗑️ Remover
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="empty-hint">Nenhum aluno cadastrado ainda.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

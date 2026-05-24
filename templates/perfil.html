@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% block title %}Meu Perfil{% endblock %}
+
+{% block content %}
+<div class="page-container page-narrow">
+    <div class="page-header">
+        <h1>{{ session.avatar }} Meu Perfil</h1>
+        <p class="page-subtitle">Personalize suas informações</p>
+    </div>
+
+    <div class="profile-card">
+        <div class="profile-preview">
+            <div class="profile-avatar-big" id="preview-avatar">{{ user.avatar or '🎓' }}</div>
+            <p class="profile-preview-name" id="preview-name">{{ user.nome or user.username }}</p>
+            {% if user.turma %}
+            <p class="profile-preview-turma">🏫 {{ user.turma }}</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="card">
+        <form method="POST" action="{{ url_for('perfil') }}" class="form">
+
+            <h3 class="form-section-title">👤 Informações básicas</h3>
+
+            <div class="form-group">
+                <label class="form-label">Nome completo *</label>
+                <input type="text" name="nome" class="form-input"
+                    value="{{ user.nome or '' }}" required
+                    oninput="document.getElementById('preview-name').textContent=this.value">
+            </div>
+
+            {% if session.role != 'adm' %}
+            <div class="form-group">
+                <label class="form-label">🏫 Turma</label>
+                <input type="text" name="turma" class="form-input"
+                    value="{{ user.turma or '' }}"
+                    placeholder="Ex: 9º Ano A">
+            </div>
+            {% else %}
+            <input type="hidden" name="turma" value="">
+            {% endif %}
+
+            <h3 class="form-section-title">🎨 Escolha seu avatar</h3>
+            <div class="avatar-grid">
+                {% for av in avatares %}
+                <label class="avatar-option {% if av == (user.avatar or '🎓') %}selected{% endif %}">
+                    <input type="radio" name="avatar" value="{{ av }}"
+                        {% if av == (user.avatar or '🎓') %}checked{% endif %}
+                        onchange="document.getElementById('preview-avatar').textContent='{{ av }}'">
+                    <span class="avatar-emoji">{{ av }}</span>
+                </label>
+                {% endfor %}
+            </div>
+
+            <h3 class="form-section-title">🔒 Alterar senha <span class="optional">(opcional)</span></h3>
+
+            <div class="form-group">
+                <label class="form-label">Nova senha</label>
+                <input type="password" name="senha" class="form-input"
+                    placeholder="Deixe em branco para não alterar"
+                    autocomplete="new-password">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Confirmar nova senha</label>
+                <input type="password" name="confirma" class="form-input"
+                    placeholder="Repita a nova senha">
+            </div>
+
+            <div class="form-actions">
+                <a href="{{ url_for('chat') }}" class="btn btn-ghost">← Voltar</a>
+                <button type="submit" class="btn btn-primary">✅ Salvar alterações</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="info-box">
+        <p class="info-title">🔑 Suas credenciais de acesso</p>
+        <p>Usuário: <strong>{{ user.username }}</strong></p>
+        <p class="info-note">O nome de usuário não pode ser alterado.</p>
+    </div>
+</div>
+{% endblock %}

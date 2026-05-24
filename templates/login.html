@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="auth-header">
+            <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo" class="auth-icon">
+            <h1 class="auth-title">Ordina</h1>
+            <p class="auth-subtitle">Sistema de organização da sala de aula</p>
+        </div>
+
+        <form method="POST" action="{{ url_for('login') }}" class="auth-form">
+            <div class="form-group">
+                <label for="username" class="form-label">👤 Usuário</label>
+                <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    class="form-input"
+                    placeholder="Digite seu usuário"
+                    required
+                    autocomplete="username"
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="password" class="form-label">🔒 Senha</label>
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    class="form-input"
+                    placeholder="Digite sua senha"
+                    required
+                    autocomplete="current-password"
+                >
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-full">
+                🚀 Entrar
+            </button>
+        </form>
+
+        <div class="auth-footer">
+            <p>Não tem conta ainda?
+                <a href="{{ url_for('registro') }}" class="link">Criar conta</a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

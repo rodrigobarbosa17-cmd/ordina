@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% block title %}Enviar Arquivo{% endblock %}
+
+{% block content %}
+<div class="page-container page-narrow">
+    <div class="page-header">
+        <h1>⬆️ Enviar Arquivo PDF</h1>
+        <p class="page-subtitle">Adicione documentos como a escala de limpeza para os alunos</p>
+    </div>
+
+    <div class="card">
+        <form method="POST" action="{{ url_for('upload_arquivo') }}"
+              enctype="multipart/form-data" class="form">
+
+            <div class="form-group">
+                <label class="form-label">📄 Arquivo PDF *</label>
+                <div class="file-upload-area">
+                    <input type="file" name="arquivo" id="arquivo"
+                           accept=".pdf" required class="file-input">
+                    <label for="arquivo" class="file-upload-label">
+                        <span class="file-upload-icon">📤</span>
+                        <span class="file-upload-text">Clique para selecionar um PDF</span>
+                        <span class="file-upload-hint">Máximo 16 MB</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">📝 Descrição (opcional)</label>
+                <textarea name="descricao" class="form-input form-textarea"
+                    placeholder="Ex: Escala de limpeza — 1º bimestre 2024"
+                    rows="3"></textarea>
+            </div>
+
+            <div class="form-actions">
+                <a href="{{ url_for('listar_arquivos') }}" class="btn btn-ghost">
+                    ← Cancelar
+                </a>
+                <button type="submit" class="btn btn-primary">
+                    ⬆️ Enviar arquivo
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div class="info-box">
+        <p class="info-title">💡 Dica para o ADM</p>
+        <ul class="info-list">
+            <li>Apenas arquivos <strong>PDF</strong> são aceitos</li>
+            <li>Os alunos poderão baixar o arquivo pelo chat ou pela lista</li>
+            <li>O arquivo mais recente aparece primeiro na lista</li>
+            <li>Você pode excluir e reenviar arquivos quando quiser</li>
+        </ul>
+    </div>
+</div>
+
+<script>
+// Mostrar nome do arquivo selecionado
+document.getElementById('arquivo').addEventListener('change', function() {
+    var label = this.nextElementSibling;
+    var icon  = label.querySelector('.file-upload-icon');
+    var text  = label.querySelector('.file-upload-text');
+    if (this.files.length) {
+        icon.textContent = '✅';
+        text.textContent = this.files[0].name;
+    }
+});
+</script>
+{% endblock %}

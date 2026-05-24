@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block title %}Arquivos — Ordina{% endblock %}
+
+{% block content %}
+<div class="page-container">
+    <div class="page-header">
+        <h1>📎 Arquivos da Sala</h1>
+        <p class="page-subtitle">Documentos e escalas disponibilizados pelo administrador</p>
+    </div>
+
+    {% if session.role == 'adm' %}
+    <div class="adm-actions">
+        <a href="{{ url_for('upload_arquivo') }}" class="btn btn-primary">
+            ⬆️ Enviar novo arquivo
+        </a>
+    </div>
+    {% endif %}
+
+    {% if arquivos %}
+    <div class="files-grid">
+        {% for arq in arquivos %}
+        <div class="file-card">
+            <div class="file-icon">📄</div>
+            <div class="file-info">
+                <h3 class="file-name">{{ arq.original_name }}</h3>
+                {% if arq.descricao %}
+                <p class="file-desc">{{ arq.descricao }}</p>
+                {% endif %}
+                <p class="file-date">📅 {{ arq.uploaded_at[:10] }}</p>
+            </div>
+            <div class="file-actions">
+                <a href="{{ url_for('download_arquivo', arquivo_id=arq.id) }}"
+                   class="btn btn-secondary btn-sm">
+                    ⬇️ Baixar
+                </a>
+                {% if session.role == 'adm' %}
+                <form method="POST" action="{{ url_for('excluir_arquivo', arquivo_id=arq.id) }}"
+                      style="display:inline;">
+                    <button type="submit" class="btn btn-danger btn-sm"
+                        onclick="return confirm('Excluir este arquivo?')">
+                        🗑️ Excluir
+                    </button>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-icon">📭</div>
+        <h3>Nenhum arquivo ainda</h3>
+        <p>O administrador ainda não enviou nenhum documento.</p>
+        {% if session.role == 'adm' %}
+        <a href="{{ url_for('upload_arquivo') }}" class="btn btn-primary">
+            ⬆️ Enviar o primeiro arquivo
+        </a>
+        {% else %}
+        <p class="empty-hint">Fique de olho! Em breve a escala de limpeza estará aqui. 👀</p>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

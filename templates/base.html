@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Ordina{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+{% if session.user_id %}
+<nav class="navbar">
+    <div class="nav-brand">
+        <img src="{{ url_for('static', filename='img/whitelogo.png') }}" alt="Logo" class="brand-icon">
+        <span class="brand-text">Ordina</span>
+    </div>
+    <div class="nav-links">
+        <a href="{{ url_for('chat') }}" class="nav-link {% if request.endpoint == 'chat' %}active{% endif %}">
+            💬 Chat
+        </a>
+        <a href="{{ url_for('listar_arquivos') }}" class="nav-link {% if request.endpoint in ['listar_arquivos','upload_arquivo'] %}active{% endif %}">
+            📎 Arquivos
+        </a>
+        {% if session.role == 'adm' %}
+        <a href="{{ url_for('painel_adm') }}" class="nav-link {% if request.endpoint == 'painel_adm' %}active{% endif %}">
+            ⚙️ Painel ADM
+        </a>
+        {% endif %}
+        <a href="{{ url_for('perfil') }}" class="nav-link {% if request.endpoint == 'perfil' %}active{% endif %}">
+            {{ session.avatar }} Perfil
+        </a>
+        <a href="{{ url_for('logout') }}" class="nav-link nav-logout">
+            🚪 Sair
+        </a>
+    </div>
+</nav>
+{% endif %}
+
+<main class="main-content {% if not session.user_id %}full-page{% endif %}">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="flash-container">
+        {% for category, message in messages %}
+        <div class="flash flash-{{ category }}">
+            {% if category == 'success' %}✅{% elif category == 'danger' %}❌{% elif category == 'warning' %}⚠️{% else %}ℹ️{% endif %}
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+</main>
+
+<footer class="footer">
+    <p>Ordina &mdash; Organização traz paz. </p>
+</footer>
+
+</body>
+</html>
